@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spesemese-deploy
+  namespace: spesemese
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spesemese
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: spesemese
+    spec:
+      containers:
+      - image: miuqom2/spesemese:1.0
+        imagePullPolicy: IfNotPresent
+        name: spesemese
+        ports:
+        - containerPort: 5007
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "500"
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /app/static
+          name: static
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      volumes:
+      - name: static
+        persistentVolumeClaim:
+          claimName: spesemese-pvc
