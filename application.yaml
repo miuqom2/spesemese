@@ -11,3 +11,10 @@ spec:
   source:
     path: k8s-manifests
     repoURL: https://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@github.com/miuqom2/spesemese.git
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+
